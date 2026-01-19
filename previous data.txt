@@ -1,0 +1,50 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class LocustForecasting {
+    public static void main(String[] args) {
+        // Create a Scanner object to read user input
+        Scanner scanner = new Scanner(System.in);
+
+        // Prompt the user to enter historical locust activity data
+        List<Double> historicalData = new ArrayList<>();
+        for (int i = 1; i <= 3; i++) {
+            System.out.print("Enter locust activity for year " + i + ": ");
+            double activity = scanner.nextDouble();
+            historicalData.add(activity);
+        }
+
+        // Close the scanner
+        scanner.close();
+
+        // Display the entered historical locust activity data
+        System.out.println("Entered historical locust activity data:");
+        for (int i = 0; i < historicalData.size(); i++) {
+            System.out.println("Year " + (i + 1) + ": " + historicalData.get(i));
+        }
+        
+        // Perform simple exponential smoothing for forecasting
+        double smoothingFactor = 0.9; // Adjust this parameter based on the data
+        double forecast = simpleExponentialSmoothing(historicalData, smoothingFactor);
+
+        // Print the forecasted locust activity
+        System.out.println("Forecasted locust activity: " + forecast);
+    }
+
+    // Simple Exponential Smoothing method for time-series forecasting
+    private static double simpleExponentialSmoothing(List<Double> data, double alpha) {
+        double forecast = 0.0;
+        int n = data.size();
+
+        // Initialize the forecast with the first observation
+        forecast = data.get(0);
+
+        // Iterate through the data to update the forecast
+        for (int i = 1; i < n; i++) {
+            forecast = alpha * data.get(i) + (1 - alpha) * forecast;
+        }
+
+        return forecast;
+    }
+}

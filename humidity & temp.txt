@@ -1,0 +1,72 @@
+import java.util.Scanner;
+
+public class ControlStrategySelector {
+
+    static class TreeNode {
+        String value;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(String value) {
+            this.value = value;
+            left = null;
+            right = null;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in); // Define scanner for user input
+        try {
+            // Prompt user to enter environmental parameters
+            System.out.print("Enter temperature: ");
+            double temp = scanner.nextDouble();
+            System.out.print("Enter humidity: ");
+            double hum = scanner.nextDouble();
+            System.out.print("Enter wind speed: ");
+            double wind = scanner.nextDouble();
+
+            // Predict the optimal control strategy
+            String predictedStrategy = predictControlStrategy(temp, hum, wind);
+            System.out.println("Optimal control strategy: " + predictedStrategy);
+        } catch (Exception e) {
+            // Handle exceptions
+            System.err.println("An error occurred: " + e.getMessage());
+        } finally {
+            // Close scanner
+            if (scanner != null) {
+                scanner.close();
+            }
+        }
+    }
+
+    public static String predictControlStrategy(double temperature, double humidity, double windSpeed) {
+        // Define decision tree based on environmental parameters
+        TreeNode root = buildDecisionTree();
+        return traverseDecisionTree(root, temperature, humidity, windSpeed);
+    }
+
+    public static TreeNode buildDecisionTree() {
+        TreeNode root = new TreeNode("Biological control");
+        root.left = new TreeNode("No control");
+        root.right = new TreeNode("Chemical control");
+        return root;
+    }
+
+    public static String traverseDecisionTree(TreeNode node, double temperature, double humidity, double windSpeed) {
+        if (node == null) {
+            return "Unknown control strategy";
+        }
+        if (node.value.equals("No control")) {
+            if (temperature > 25 && humidity > 50 && windSpeed < 10) {
+                return node.value;
+            }
+        } else if (node.value.equals("Chemical control")) {
+            if (temperature > 30 && humidity < 40 && windSpeed > 15) {
+                return node.value;
+            }
+        } else {
+            return node.value;
+        }
+        return "Unknown control strategy";
+    }
+}

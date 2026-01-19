@@ -1,0 +1,95 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class LocustRiskAssessment {
+
+    public static void main(String[] args) {
+        // Prompt the user to enter area data
+        Map<String, String> areaData = getInputAreaData();
+
+        // Perform risk assessment and vulnerability mapping
+        for (Map.Entry<String, String> entry : areaData.entrySet()) {
+            String area = entry.getKey();
+            String data = entry.getValue();
+            double riskScore = calculateRiskScore(data);
+            String vulnerabilityLevel = assessVulnerability(riskScore);
+            System.out.println("Area: " + area + ", Risk Score: " + riskScore + ", Vulnerability Level: " + vulnerabilityLevel);
+        }
+    }
+
+    // Method to prompt the user to input area data
+    public static Map<String, String> getInputAreaData() {
+        Scanner scanner = new Scanner(System.in);
+        Map<String, String> areaData = new HashMap<>();
+
+        System.out.println("Enter area data in the format: CropType, SocioeconomicIndicator");
+        System.out.println("Example: Wheat, Medium Income");
+
+        for (int i = 1; i <= 1; i++) {
+            System.out.print("Enter data for Area" + i + ": ");
+            String data = scanner.nextLine();
+            areaData.put("Area" + i, data);
+        }
+
+        scanner.close();
+        return areaData;
+    }
+
+    // Simplified method to calculate risk score based on crop types and socio-economic indicators
+    public static double calculateRiskScore(String data) {
+        // Split data into crop type and socio-economic indicator
+        String[] parts = data.split(", ");
+        String cropType = parts[0];
+        String socioeconomicIndicator = parts[1];
+
+        // Assign risk scores based on crop type and socio-economic indicator
+        double cropRiskScore = getCropRiskScore(cropType);
+        double socioeconomicRiskScore = getSocioeconomicRiskScore(socioeconomicIndicator);
+
+        // Combine and weight the risk scores
+        double totalRiskScore = (cropRiskScore * 0.6) + (socioeconomicRiskScore * 0.4);
+        return totalRiskScore;
+    }
+
+    // Method to assess vulnerability level based on risk score
+    public static String assessVulnerability(double riskScore) {
+        if (riskScore >= 0 && riskScore < 0.3) {
+            return "Low";
+        } else if (riskScore >= 0.3 && riskScore < 0.6) {
+            return "Medium";
+        } else {
+            return "High";
+        }
+    }
+
+    // Method to assign risk score based on crop type
+    public static double getCropRiskScore(String cropType) {
+        // Assign risk scores based on crop type
+        if (cropType.equalsIgnoreCase("Wheat")) 
+            return 0.1;
+        } else if (cropType.equalsIgnoreCase("Corn")) {
+            return 0.3;
+        } else if (cropType.equalsIgnoreCase("Rice")) {
+            return 0.2;
+        } else if (cropType.equalsIgnoreCase("Sorghum")) {
+            return 0.4;
+        } else {
+            return 0.5; // Default risk score for unknown crop types
+        }
+    }
+
+    // Method to assign risk score based on socio-economic indicator
+    public static double getSocioeconomicRiskScore(String socioeconomicIndicator) {
+        // Assign risk scores based on socio-economic indicator
+        if (socioeconomicIndicator.equalsIgnoreCase("Low Income")) {
+            return 0.4;
+        } else if (socioeconomicIndicator.equalsIgnoreCase("Medium Income")) {
+            return 0.2;
+        } else if (socioeconomicIndicator.equalsIgnoreCase("High Income")) {
+            return 0.1;
+        } else {
+            return 0.3; // Default risk score for unknown socio-economic indicators
+        }
+    }
+}
